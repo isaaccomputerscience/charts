@@ -1,0 +1,130 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "isaac-app.api.fullname" . }}
+  labels:
+    {{- include "isaac-app.labels" . | nindent 4 }}
+    {{- include "isaac-app.api.selectorLabels" . | nindent 4 }}
+  {{- with .Values.api.deployment.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "isaac-app.api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- if .Values.api.prometheusExport.enabled }}
+      annotations:
+        prometheus.io/port: {{ .Values.api.prometheusExport.port | quote }}
+        prometheus.io/path: {{ .Values.api.prometheusExport.path | quote }}
+        prometheus.io/scrape: "true"
+      {{- end }}
+      labels:
+        {{- include "isaac-app.api.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.api.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsUser: 999
+        fsGroup: 999
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            {{- if .Values.api.prometheusExport.enabled }}
+            - name: prometheus
+              containerPort: {{ .Values.api.prometheusExport.port }}
+              protocol: TCP
+            {{- end }}
+          env:
+            - name: SEGUE_CONFIG_LOCATION
+              value: /local/data/conf/segue-config.properties
+          livenessProbe:
+            httpGet:
+              path: /isaac-api/api/info/segue_version
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /isaac-api/api/info/segue_version
+              port:  http
+          startupProbe:
+            httpGet:
+              path: /isaac-api/api/info/segue_version
+              port:  http
+            periodSeconds: 10
+            failureThreshold: 15
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+          volumeMounts:
+            - name: isaac-config
+              mountPath: /local/data/conf
+            - name: isaac-ssh-key
+              mountPath: /local/data/ssh-key
+            - name: git-content
+              mountPath: /local/data/git
+        - name: git-sync
+          image: registry.k8s.io/git-sync/git-sync:v3.6.2
+          args:
+            - --repo={{ .Values.api.config.contentRepo }}
+            - --root=/local/data/git
+            - --depth={{ .Values.api.config.contentRepoDepth }}
+            - --wait={{ .Values.api.config.contentRepoWait }}
+            - --ssh
+            - --ssh-key-file=/local/data/ssh-key/repo-private-key-rsa
+            - --ssh-known-hosts=false
+            - --add-user
+          volumeMounts:
+            - name: isaac-ssh-key
+              mountPath: /local/data/ssh-key
+            - name: git-content
+              mountPath: /local/data/git
+      initContainers:
+        - name: git-sync-init
+          image: registry.k8s.io/git-sync/git-sync:v3.6.2
+          args:
+            - --one-time
+            - --repo={{ .Values.api.config.contentRepo }}
+            - --root=/local/data/git
+            - --depth={{ .Values.api.config.contentRepoDepth }}
+            - --wait={{ .Values.api.config.contentRepoWait }}
+            - --ssh
+            - --ssh-key-file=/local/data/ssh-key/repo-private-key-rsa
+            - --ssh-known-hosts=false
+            - --add-user
+          volumeMounts:
+            - name: isaac-ssh-key
+              mountPath: /local/data/ssh-key
+            - name: git-content
+              mountPath: /local/data/git
+      volumes:
+        - name: isaac-config
+          secret:
+            secretName: {{ .Values.api.config.secretName }}
+        - name: isaac-ssh-key
+          secret:
+            defaultMode: 0400
+            secretName: {{ .Values.api.config.sshSecretName }}
+        - name: git-content
+          emptyDir: {}
+
+      {{- with .Values.api.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.api.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.api.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

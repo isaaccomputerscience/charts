@@ -1,0 +1,381 @@
+# Default values for isaac-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+nameOverride: ""
+fullnameOverride: ""
+
+isaac-app-fe:
+  image:
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-react-app-cs
+    tag: latest
+  service:
+    type: ClusterIP
+  containerPorts:
+    http: 80
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: www.non-prod.isaaccomputerscience.org
+    path: "/"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      # NOTE: Using configuration-snippet in a multitenant cluster has security risks, see https://github.com/kubernetes/ingress-nginx/issues/7837
+      # Since we are installing this in a non multitenant cluster and we assume all invididuals with access to the ArgoCD repo are admins, we
+      # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
+      # completed: https://github.com/kubernetes/ingress-nginx/issues/7811
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "Content-Security-Policy: default-src 'self' wss://www.non-prod.isaaccomputerscience.org https://cdn.non-prod.isaaccomputerscience.org https://www.google-analytics.com https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://content-editor.non-prod.isaaccomputerscience.org  https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://www.google-analytics.com https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.www.non-prod.isaaccomputerscience.org https://fonts.gstatic.com;";
+
+isaac-cdn:
+  image:
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-cdn
+    tag: latest
+  service:
+    type: ClusterIP
+  containerPorts:
+    http: 80
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: cdn.non-prod.isaaccomputerscience.org
+    path: "/"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    extraTls:
+      - hosts:
+          - cdn.non-prod.isaaccomputerscience.org
+        secretName: cdn-isaac
+
+isaac-app-renderer:
+  image:
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-react-app-cs-renderer
+    tag: latest
+  service:
+    type: ClusterIP
+  containerPorts:
+    http: 80
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: editor-preview.non-prod.isaaccomputerscience.org
+    path: "/"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      # NOTE: Using configuration-snippet in a multitenant cluster has security risks, see https://github.com/kubernetes/ingress-nginx/issues/7837
+      # Since we are installing this in a non multitenant cluster and we assume all invididuals with access to the ArgoCD repo are admins, we
+      # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
+      # completed: https://github.com/kubernetes/ingress-nginx/issues/7811
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "default-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://www.staging.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://content-editor.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://www.staging.non-prod.isaaccomputerscience.org https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://fonts.gstatic.com; frame-ancestors 'self' https://content-editor.non-prod.isaaccomputerscience.org;";
+    extraTls:
+      - hosts:
+          - editor-preview.non-prod.isaaccomputerscience.org
+        secretName: editor-preview-isaac
+
+isaac-content-editor:
+  image:
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-content-editor
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+  containerPorts:
+    http: 80
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: content-editor.non-prod.isaaccomputerscience.org
+    path: "/"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      # NOTE: Using configuration-snippet in a multitenant cluster has security risks, see https://github.com/kubernetes/ingress-nginx/issues/7837
+      # Since we are installing this in a non multitenant cluster and we assume all invididuals with access to the ArgoCD repo are admins, we
+      # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
+      # completed: https://github.com/kubernetes/ingress-nginx/issues/7811
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_headers "default-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://staging.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com https://www.youtube.com https://api.github.com https://editor-auth.non-prod.isaaccomputerscience.org object-src 'none'; frame-src 'self' https://editor-preview.non-prod.isaaccomputerscience.org https://content-editor.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://fonts.gstatic.com;";
+    extraTls:
+      - hosts:
+          - content-editor.non-prod.isaaccomputerscience.org
+        secretName: content-editor-isaac
+  extraEnvVars:
+    - name: REACT_APP_SITE
+      value: CS
+    - name: REACT_APP_CLIENT_ID
+      value: f1540415e26cc2a5765a
+    - name: REACT_APP_AUTH_URL
+      value: https://editor-auth.non-prod.isaaccomputerscience.org/access_token
+    - name: REACT_APP_GITHUB_OWNER
+      value: isaaccomputerscience
+    - name: REACT_APP_CONTENT_REPO
+      value: rutherford-content
+    - name: REACT_APP_PREVIEW_HOST
+      value: https://editor-preview.non-prod.isaaccomputerscience.org
+    - name: REACT_APP_API_STAGING_HOST
+      value: https://www.staging.non-prod.isaaccomputerscience.org
+    - name: REACT_APP_API_HOST
+      value: https://www.non-prod.isaaccomputerscience.org
+
+isaac-code-editor:
+  image:
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-code-editor
+    tag: latest
+  service:
+    type: ClusterIP
+  containerPorts:
+    http: 80
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: code-editor.non-prod.isaaccomputerscience.org
+    path: "/"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    extraTls:
+      - hosts:
+          - code-editor.non-prod.isaaccomputerscience.org
+        secretName: code-editor-isaac
+
+elastic-search:
+  protocol: http
+  createCert: false
+  imageTag: 7.17.6
+  esConfig:
+    elasticsearch.yml: |
+      xpack.security.enabled: false
+      xpack.security.transport.ssl.enabled: false
+  clusterName: isaac-cs-content
+  persistence:
+    enabled: false
+  replicas: 1
+  extraEnvs:
+    - name: ELASTIC_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: isaac-secrets
+          key: elasticsearch-pw
+  resources: # bad needs fixed but temp on current hardware
+    requests:
+      cpu: "100m"
+      memory: "300Mi"
+    limits:
+      cpu: "2000m"
+      memory: "1Gi"
+
+api:
+  name: "api"
+  replicaCount: 1
+  image:
+    repository: ghcr.io/isaaccomputerscience/isaac-api
+    tag: latest
+    pullPolicy: Always
+  imagePullSecrets: []
+  config:
+    secretName: isaac-secrets
+    sshSecretName: isaac-ssh-key
+    contentRepo: git@github.com:isaaccomputerscience/rutherford-content.git
+    contentRepoDepth: 1
+    contentRepoWait: 60
+  prometheusExport:
+    enabled: true
+    path: /
+    port: 9966
+  service:
+    type: ClusterIP
+    port: 80
+  deployment:
+    annotations:
+      secret.reloader.stakater.com/reload: "isaac-secrets,isaac-ssh-key"
+  ingress:
+    enabled: enabled
+    className: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/rewrite-target: /isaac-api/$2
+      nginx.ingress.kubernetes.io/proxy-cookie-path: /isaac-api /
+    hosts:
+      - host: www.non-prod.isaaccomputerscience.org
+        paths:
+          - path: /api/([^/]+)/(.*)$
+            pathType: Prefix
+    tls:
+      - secretName: www-isaac
+        hosts:
+          - www.non-prod.isaaccomputerscience.org
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+etl:
+  name: "etl"
+  replicaCount: 1
+  image:
+    repository: ghcr.io/isaaccomputerscience/isaac-api-etl
+    tag: latest
+    pullPolicy: Always
+  imagePullSecrets: []
+  config:
+    apiVersion: v3.3.2-snapshot
+    secretName: isaac-secrets
+    sshSecretName: isaac-ssh-key
+    contentRepo: git@github.com:isaaccomputerscience/rutherford-content.git
+    contentRepoDepth: 1
+    contentRepoWait: 60
+  service:
+    type: ClusterIP
+    port: 80
+  deployment:
+    annotations:
+      secret.reloader.stakater.com/reload: "isaac-secrets,isaac-ssh-key"
+  ingress:
+    enabled: false
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+eqChecker:
+  name: "equality-checker"
+  replicaCount: 1
+  image:
+    repository: ucamcldtg/equality-checker
+    tag: latest
+    pullPolicy: Always
+  imagePullSecrets: []
+  podAnnotations: {}
+  podSecurityContext: {}
+  # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+  # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 80
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+  #   memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+chemChecker:
+  name: "chemistry-checker"
+  replicaCount: 1
+  image:
+    repository: ucamcldtg/chemistry-checker
+    tag: latest
+    pullPolicy: Always
+  imagePullSecrets: []
+  podAnnotations: {}
+  podSecurityContext: {}
+  # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: false
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+editorAuth:
+  name: "editor-auth"
+  replicaCount: 1
+  image:
+    repository: ghcr.io/isaaccomputerscience/isaac-editor-auth
+    tag: latest
+    pullPolicy: Always
+  imagePullSecrets: []
+  config:
+    allowOriginHeader: https://content-editor.non-prod.isaaccomputerscience.org
+    secretName: isaac-editor-auth-secrets
+  service:
+    type: ClusterIP
+    port: 80
+  deployment:
+    annotations:
+      secret.reloader.stakater.com/reload: "isaac-editor-auth-secrets"
+  ingress:
+    enabled: enabled
+    className: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: editor-auth.non-prod.isaaccomputerscience.org
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: editor-auth-isaac
+        hosts:
+          - editor-auth.non-prod.isaaccomputerscience.org
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
