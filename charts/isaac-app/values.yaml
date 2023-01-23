@@ -3,6 +3,12 @@
 # Declare variables to be passed into your templates.
 nameOverride: ""
 fullnameOverride: ""
+contentRepo:
+  url: git@github.com:isaaccomputerscience/rutherford-content.git
+  depth: 25
+  wait: 60
+  liveSha: 542dc78f3d5cc3a5514f62bdc6093d9a772a2f72
+  latestSha: e1909b05d08fecd5b34984f52f38f6a75754c915
 
 isaac-app-fe:
   image:
@@ -178,9 +184,6 @@ api:
   config:
     secretName: isaac-secrets
     sshSecretName: isaac-ssh-key
-    contentRepo: git@github.com:isaaccomputerscience/rutherford-content.git
-    contentRepoDepth: 1
-    contentRepoWait: 60
   prometheusExport:
     enabled: true
     path: /
@@ -234,9 +237,6 @@ etl:
     apiVersion: v3.3.2-snapshot
     secretName: isaac-secrets
     sshSecretName: isaac-ssh-key
-    contentRepo: git@github.com:isaaccomputerscience/rutherford-content.git
-    contentRepoDepth: 1
-    contentRepoWait: 60
   service:
     type: ClusterIP
     port: 80
