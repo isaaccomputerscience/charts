@@ -60,7 +60,7 @@ spec:
               mountPath: /local/data/ssh-key
             - name: git-content
               mountPath: /local/data/git
-            - name: content-config
+            - name: content-indices
               mountPath: /local/data/
         - name: git-sync
           image: registry.k8s.io/git-sync/git-sync:v3.6.2
@@ -106,9 +106,9 @@ spec:
             secretName: {{ .Values.etl.config.sshSecretName }}
         - name: git-content
           emptyDir: {}
-        - name: content-config
+        - name: content-indices
           configMap:
-            name: {{ include "isaac-app.name" . }}-content-config
+            name: {{ include "isaac-app.name" . }}-content-indices
 
       {{- with .Values.etl.nodeSelector }}
       nodeSelector:
