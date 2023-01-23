@@ -194,6 +194,7 @@ api:
   deployment:
     annotations:
       secret.reloader.stakater.com/reload: "isaac-secrets,isaac-ssh-key"
+      configmap.reloader.stakater.com/reload: "isaac-app-content-indices"
   ingress:
     enabled: enabled
     className: "nginx"
@@ -243,6 +244,7 @@ etl:
   deployment:
     annotations:
       secret.reloader.stakater.com/reload: "isaac-secrets,isaac-ssh-key"
+      configmap.reloader.stakater.com/reload: "isaac-app-content-indices"
   ingress:
     enabled: false
   resources: {}
