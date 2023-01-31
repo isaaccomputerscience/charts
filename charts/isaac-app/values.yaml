@@ -14,7 +14,7 @@ isaac-app-fe:
   image:
     registry: ghcr.io
     repository: isaaccomputerscience/isaac-react-app-cs
-    tag: latest
+    tag: v1.0.0
   service:
     type: ClusterIP
   containerPorts:
@@ -37,7 +37,7 @@ isaac-cdn:
   image:
     registry: ghcr.io
     repository: isaaccomputerscience/isaac-cdn
-    tag: latest
+    tag: v1.0.0
   service:
     type: ClusterIP
   containerPorts:
@@ -58,7 +58,7 @@ isaac-app-renderer:
   image:
     registry: ghcr.io
     repository: isaaccomputerscience/isaac-react-app-cs-renderer
-    tag: latest
+    tag: v1.0.0
   service:
     type: ClusterIP
   containerPorts:
@@ -85,8 +85,7 @@ isaac-content-editor:
   image:
     registry: ghcr.io
     repository: isaaccomputerscience/isaac-content-editor
-    tag: latest
-    pullPolicy: Always
+    tag: v1.0.0
   service:
     type: ClusterIP
   containerPorts:
@@ -133,7 +132,7 @@ isaac-code-editor:
   image:
     registry: ghcr.io
     repository: isaaccomputerscience/isaac-code-editor
-    tag: latest
+    tag: v1.0.0
   service:
     type: ClusterIP
   containerPorts:
@@ -181,8 +180,8 @@ api:
   replicaCount: 1
   image:
     repository: ghcr.io/isaaccomputerscience/isaac-api
-    tag: latest
-    pullPolicy: Always
+    tag: v1.0.0
+    pullPolicy: IfNotPresent
   imagePullSecrets: []
   config:
     secretName: isaac-secrets
@@ -234,8 +233,8 @@ etl:
   replicaCount: 1
   image:
     repository: ghcr.io/isaaccomputerscience/isaac-api-etl
-    tag: latest
-    pullPolicy: Always
+    tag: v1.0.0
+    pullPolicy: IfNotPresent
   imagePullSecrets: []
   config:
     apiVersion: v3.3.2-snapshot
@@ -344,8 +343,8 @@ editorAuth:
   replicaCount: 1
   image:
     repository: ghcr.io/isaaccomputerscience/isaac-editor-auth
-    tag: latest
-    pullPolicy: Always
+    tag: v1.0.0
+    pullPolicy: IfNotPresent
   imagePullSecrets: []
   config:
     allowOriginHeader: https://content-editor.non-prod.isaaccomputerscience.org
