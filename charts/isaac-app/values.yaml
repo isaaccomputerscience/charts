@@ -14,7 +14,7 @@ isaac-app-fe:
   image:
     registry: ghcr.io
     repository: isaaccomputerscience/isaac-react-app-cs
-    tag: latest
+    tag: v1.0.0
   service:
     type: ClusterIP
   containerPorts:
@@ -43,7 +43,7 @@ isaac-cdn:
   image:
     registry: ghcr.io
     repository: isaaccomputerscience/isaac-cdn
-    tag: latest
+    tag: v1.0.0
   service:
     type: ClusterIP
   containerPorts:
@@ -70,7 +70,7 @@ isaac-app-renderer:
   image:
     registry: ghcr.io
     repository: isaaccomputerscience/isaac-react-app-cs-renderer
-    tag: latest
+    tag: v1.0.0
   service:
     type: ClusterIP
   containerPorts:
@@ -103,8 +103,7 @@ isaac-content-editor:
   image:
     registry: ghcr.io
     repository: isaaccomputerscience/isaac-content-editor
-    tag: latest
-    pullPolicy: Always
+    tag: v1.0.0
   service:
     type: ClusterIP
   containerPorts:
@@ -116,6 +115,9 @@ isaac-content-editor:
     path: "/"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: isaac-basic-auth
+      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - Content Editor'
       # NOTE: Using configuration-snippet in a multitenant cluster has security risks, see https://github.com/kubernetes/ingress-nginx/issues/7837
       # Since we are installing this in a non multitenant cluster and we assume all invididuals with access to the ArgoCD repo are admins, we
       # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
@@ -154,7 +156,7 @@ isaac-code-editor:
   image:
     registry: ghcr.io
     repository: isaaccomputerscience/isaac-code-editor
-    tag: latest
+    tag: v1.0.0
   service:
     type: ClusterIP
   containerPorts:
@@ -207,8 +209,8 @@ api:
   replicaCount: 1
   image:
     repository: ghcr.io/isaaccomputerscience/isaac-api
-    tag: latest
-    pullPolicy: Always
+    tag: v1.0.0
+    pullPolicy: IfNotPresent
   imagePullSecrets: []
   config:
     secretName: isaac-secrets
@@ -261,8 +263,8 @@ etl:
   replicaCount: 1
   image:
     repository: ghcr.io/isaaccomputerscience/isaac-api-etl
-    tag: latest
-    pullPolicy: Always
+    tag: v1.0.0
+    pullPolicy: IfNotPresent
   imagePullSecrets: []
   config:
     apiVersion: v3.3.2-snapshot
@@ -363,8 +365,8 @@ editorAuth:
   replicaCount: 1
   image:
     repository: ghcr.io/isaaccomputerscience/isaac-editor-auth
-    tag: latest
-    pullPolicy: Always
+    tag: v1.0.0
+    pullPolicy: IfNotPresent
   imagePullSecrets: []
   config:
     allowOriginHeader: https://content-editor.non-prod.isaaccomputerscience.org
