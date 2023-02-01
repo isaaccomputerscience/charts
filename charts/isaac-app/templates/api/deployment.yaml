@@ -84,6 +84,8 @@ spec:
             - --ssh-key-file=/local/data/ssh-key/repo-private-key-rsa
             - --ssh-known-hosts=false
             - --add-user
+          resources:
+            { { - toYaml .Values.api.git-sync.resources | nindent 12 } }
           volumeMounts:
             - name: isaac-ssh-key
               mountPath: /local/data/ssh-key
@@ -102,6 +104,8 @@ spec:
             - --ssh-key-file=/local/data/ssh-key/repo-private-key-rsa
             - --ssh-known-hosts=false
             - --add-user
+          resources:
+            { { - toYaml .Values.api.git-sync.resources | nindent 12 } }
           volumeMounts:
             - name: isaac-ssh-key
               mountPath: /local/data/ssh-key

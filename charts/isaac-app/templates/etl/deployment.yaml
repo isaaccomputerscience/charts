@@ -78,6 +78,8 @@ spec:
               mountPath: /local/data/ssh-key
             - name: git-content
               mountPath: /local/data/git
+          resources:
+            { { - toYaml .Values.etl.git-sync.resources | nindent 12 } }
       initContainers:
         - name: git-sync-init
           image: registry.k8s.io/git-sync/git-sync:v3.6.2
@@ -96,6 +98,8 @@ spec:
               mountPath: /local/data/ssh-key
             - name: git-content
               mountPath: /local/data/git
+          resources:
+            { { - toYaml .Values.etl.git-sync.resources | nindent 12 } }
       volumes:
         - name: isaac-config
           secret:
