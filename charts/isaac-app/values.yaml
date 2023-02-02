@@ -248,7 +248,7 @@ api:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  git-sync:
+  gitSync:
     resources:
       requests:
         cpu: 11m
@@ -285,7 +285,7 @@ etl:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  git-sync:
+  gitSync:
     resources:
       requests:
         cpu: 11m
