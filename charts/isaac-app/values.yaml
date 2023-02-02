@@ -252,9 +252,9 @@ api:
     resources:
       requests:
         cpu: 11m
-        memory: 53M
+        memory: 100M
       limits:
-        memory: 53M
+        memory: 100M
 etl:
   name: "etl"
   replicaCount: 1
