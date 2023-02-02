@@ -115,9 +115,6 @@ isaac-content-editor:
     path: "/"
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
-      nginx.ingress.kubernetes.io/auth-type: basic
-      nginx.ingress.kubernetes.io/auth-secret: isaac-basic-auth
-      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - Content Editor'
       # NOTE: Using configuration-snippet in a multitenant cluster has security risks, see https://github.com/kubernetes/ingress-nginx/issues/7837
       # Since we are installing this in a non multitenant cluster and we assume all invididuals with access to the ArgoCD repo are admins, we
       # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
@@ -233,6 +230,9 @@ api:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/rewrite-target: /isaac-api/$2
       nginx.ingress.kubernetes.io/proxy-cookie-path: /isaac-api /
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: isaac-basic-auth
+      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - Isaac Computer Science'
     hosts:
       - host: www.non-prod.isaaccomputerscience.org
         paths:
