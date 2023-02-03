@@ -5,7 +5,7 @@ nameOverride: ""
 fullnameOverride: ""
 contentRepo:
   url: git@github.com:isaaccomputerscience/rutherford-content.git
-  depth: 25
+  depth: 1000
   wait: 60
   liveSha: 542dc78f3d5cc3a5514f62bdc6093d9a772a2f72
   latestSha: e1909b05d08fecd5b34984f52f38f6a75754c915
