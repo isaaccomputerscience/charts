@@ -32,12 +32,7 @@ isaac-app-fe:
       # completed: https://github.com/kubernetes/ingress-nginx/issues/7811
       nginx.ingress.kubernetes.io/configuration-snippet: |
         more_set_headers "Content-Security-Policy: default-src 'self' wss://www.non-prod.isaaccomputerscience.org https://cdn.non-prod.isaaccomputerscience.org https://www.google-analytics.com https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://content-editor.non-prod.isaaccomputerscience.org  https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://www.google-analytics.com https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.www.non-prod.isaaccomputerscience.org https://fonts.gstatic.com;";
-  resources:
-    requests:
-      cpu: 15m
-      memory: 105M
-    limits:
-      memory: 105M
+  resources: {}
 
 isaac-cdn:
   image:
@@ -59,12 +54,7 @@ isaac-cdn:
       - hosts:
           - cdn.non-prod.isaaccomputerscience.org
         secretName: cdn-isaac
-  resources:
-    requests:
-      cpu: 15m
-      memory: 105M
-    limits:
-      memory: 105M
+  resources: {}
 
 isaac-app-renderer:
   image:
@@ -92,12 +82,7 @@ isaac-app-renderer:
       - hosts:
           - editor-preview.non-prod.isaaccomputerscience.org
         secretName: editor-preview-isaac
-  resources:
-    requests:
-      cpu: 15m
-      memory: 105M
-    limits:
-      memory: 105M
+  resources: {}
 
 isaac-content-editor:
   image:
@@ -142,12 +127,7 @@ isaac-content-editor:
       value: https://www.staging.non-prod.isaaccomputerscience.org
     - name: REACT_APP_API_HOST
       value: https://www.non-prod.isaaccomputerscience.org
-  resources:
-    requests:
-      cpu: 15m
-      memory: 105M
-    limits:
-      memory: 105M
+  resources: {}
 
 isaac-code-editor:
   image:
@@ -169,12 +149,7 @@ isaac-code-editor:
       - hosts:
           - code-editor.non-prod.isaaccomputerscience.org
         secretName: code-editor-isaac
-  resources:
-    requests:
-      cpu: 15m
-      memory: 105M
-    limits:
-      memory: 105M
+  resources: {}
 
 elastic-search:
   protocol: http
@@ -194,12 +169,7 @@ elastic-search:
         secretKeyRef:
           name: isaac-secrets
           key: elasticsearch-pw
-  resources:
-    requests:
-      cpu: 15m
-      memory: 1Gi
-    limits:
-      memory: 1Gi
+  resources: {}
 
 api:
   name: "api"
@@ -239,22 +209,13 @@ api:
       - secretName: www-isaac
         hosts:
           - www.non-prod.isaaccomputerscience.org
-  resources:
-    limits:
-      memory: 1103M
-    requests:
-      cpu: 11m
-      memory: 1103M
+  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
   gitSync:
-    resources:
-      requests:
-        cpu: 11m
-        memory: 100M
-      limits:
-        memory: 100M
+    resources: {}
+
 etl:
   name: "etl"
   replicaCount: 1
@@ -276,22 +237,12 @@ etl:
       configmap.reloader.stakater.com/reload: "isaac-app-content-indices"
   ingress:
     enabled: false
-  resources:
-    limits:
-      memory: 1169M
-    requests:
-      cpu: 11m
-      memory: 1169M
+  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
   gitSync:
-    resources:
-      requests:
-        cpu: 11m
-        memory: 53M
-      limits:
-        memory: 53M
+    resources: {}
 
 eqChecker:
   name: "equality-checker"
@@ -314,12 +265,7 @@ eqChecker:
   service:
     type: ClusterIP
     port: 80
-  resources:
-    limits:
-      memory: 105M
-    requests:
-      cpu: 15m
-      memory: 105M
+  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -347,12 +293,7 @@ chemChecker:
     port: 80
   ingress:
     enabled: false
-  resources:
-    limits:
-      memory: 273M
-    requests:
-      cpu: 11m
-      memory: 273M
+  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -388,12 +329,7 @@ editorAuth:
       - secretName: editor-auth-isaac
         hosts:
           - editor-auth.non-prod.isaaccomputerscience.org
-  resources:
-    limits:
-      memory: 105M
-    requests:
-      cpu: 15m
-      memory: 105M
+  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
