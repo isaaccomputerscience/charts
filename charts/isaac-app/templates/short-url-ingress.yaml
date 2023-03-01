@@ -1,0 +1,33 @@
+{{- if .Values.shortUrlIngress.enabled -}}
+{{- if and .Values.shortUrlIngress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+  {{- if not (hasKey .Values.shortUrlIngress.annotations "kubernetes.io/ingress.class") }}
+  {{- $_ := set .Values.shortUrlIngress.annotations "kubernetes.io/ingress.class" .Values.shortUrlIngress.className}}
+  {{- end }}
+{{- end }}
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ .Values.shortUrlIngress.name }}
+  labels:
+    {{- include "isaac-app.labels" . | nindent 4 }}
+  {{- with .Values.shortUrlIngress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.shortUrlIngress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.shortUrlIngress.className }}
+  {{- end }}
+  tls:
+    - hosts:
+        - {{ .Values.shortUrlIngress.host }}
+      secretName: {{ .Values.shortUrlIngress.name }}
+  rules:
+    - host: {{ .Values.shortUrlIngress.host }}
+{{- end }}
