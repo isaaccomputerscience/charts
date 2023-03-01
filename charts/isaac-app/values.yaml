@@ -340,7 +340,8 @@ shortUrlIngress:
   className: "nginx"
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.org/server-snippets: |
+    nginx.ingress.kubernetes.io/permanent-redirect: https://www.non-prod.isaaccomputerscience.org$request_uri
+    nginx.ingress.kubernetes.io/server-snippet: |
       location /q/ {
             rewrite ^/q/(.*)$ https://www.non-prod.isaaccomputerscience.org/questions/$1 permanent;
       }
@@ -379,9 +380,5 @@ shortUrlIngress:
 
       location /join/ {
           rewrite ^/join/(.*)$ https://www.non-prod.isaaccomputerscience.org/account?authToken=$1 permanent;
-      }
-
-      location / {
-          return 301 https://www.non-prod.isaaccomputerscience.org$request_uri;
       }
   host: short.non-prod.isaaccomputerscience.org
