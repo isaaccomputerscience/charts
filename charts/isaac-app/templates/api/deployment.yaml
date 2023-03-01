@@ -81,7 +81,7 @@ spec:
             - --depth={{ .Values.contentRepo.depth }}
             - --wait={{ .Values.contentRepo.wait }}
             - --ssh
-            - --ssh-key-file=/local/data/ssh-key/repo-private-key-rsa
+            - --ssh-key-file=/local/data/ssh-key/content-key
             - --ssh-known-hosts=false
             - --add-user
           resources:
@@ -101,7 +101,7 @@ spec:
             - --depth={{ .Values.contentRepo.depth }}
             - --wait={{ .Values.contentRepo.wait}}
             - --ssh
-            - --ssh-key-file=/local/data/ssh-key/repo-private-key-rsa
+            - --ssh-key-file=/local/data/ssh-key/content-key
             - --ssh-known-hosts=false
             - --add-user
           resources:
