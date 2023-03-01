@@ -67,7 +67,7 @@ spec:
           volumeMounts:
             - name: isaac-config
               mountPath: /local/data/conf
-            - name: isaac-ssh-key
+            - name: isaac-content-key
               mountPath: /local/data/ssh-key
             - name: git-content
               mountPath: /local/data/git
@@ -87,7 +87,7 @@ spec:
           resources:
             {{- toYaml .Values.api.gitSync.resources | nindent 12 }}
           volumeMounts:
-            - name: isaac-ssh-key
+            - name: isaac-content-key
               mountPath: /local/data/ssh-key
             - name: git-content
               mountPath: /local/data/git
@@ -107,7 +107,7 @@ spec:
           resources:
             {{- toYaml .Values.api.gitSync.resources | nindent 12 }}
           volumeMounts:
-            - name: isaac-ssh-key
+            - name: isaac-content-key
               mountPath: /local/data/ssh-key
             - name: git-content
               mountPath: /local/data/git
@@ -115,10 +115,10 @@ spec:
         - name: isaac-config
           secret:
             secretName: {{ .Values.api.config.secretName }}
-        - name: isaac-ssh-key
+        - name: isaac-content-key
           secret:
             defaultMode: 0400
-            secretName: {{ .Values.api.config.sshSecretName }}
+            secretName: {{ .Values.api.config.contentKeySecretName }}
         - name: git-content
           emptyDir: {}
         - name: content-indices

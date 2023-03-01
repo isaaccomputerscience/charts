@@ -181,7 +181,7 @@ api:
   imagePullSecrets: []
   config:
     secretName: isaac-secrets
-    sshSecretName: isaac-ssh-key
+    contentKeySecretName: isaac-content-key
   prometheusExport:
     enabled: true
     path: /
@@ -191,7 +191,7 @@ api:
     port: 80
   deployment:
     annotations:
-      secret.reloader.stakater.com/reload: "isaac-secrets,isaac-ssh-key"
+      secret.reloader.stakater.com/reload: "isaac-secrets,isaac-content-key"
       configmap.reloader.stakater.com/reload: "isaac-app-content-indices"
   ingress:
     enabled: enabled
@@ -227,13 +227,13 @@ etl:
   config:
     apiVersion: v3.3.2-snapshot
     secretName: isaac-secrets
-    sshSecretName: isaac-ssh-key
+    contentKeySecretName: isaac-content-key
   service:
     type: ClusterIP
     port: 80
   deployment:
     annotations:
-      secret.reloader.stakater.com/reload: "isaac-secrets,isaac-ssh-key"
+      secret.reloader.stakater.com/reload: "isaac-secrets,isaac-content-key"
       configmap.reloader.stakater.com/reload: "isaac-app-content-indices"
   ingress:
     enabled: false

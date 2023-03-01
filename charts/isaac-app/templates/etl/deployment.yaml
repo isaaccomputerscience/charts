@@ -56,7 +56,7 @@ spec:
           volumeMounts:
             - name: isaac-config
               mountPath: /local/data/conf
-            - name: isaac-ssh-key
+            - name: isaac-content-key
               mountPath: /local/data/ssh-key
             - name: git-content
               mountPath: /local/data/git
@@ -74,7 +74,7 @@ spec:
             - --ssh-known-hosts=false
             - --add-user
           volumeMounts:
-            - name: isaac-ssh-key
+            - name: isaac-content-key
               mountPath: /local/data/ssh-key
             - name: git-content
               mountPath: /local/data/git
@@ -94,7 +94,7 @@ spec:
             - --ssh-known-hosts=false
             - --add-user
           volumeMounts:
-            - name: isaac-ssh-key
+            - name: isaac-content-key
               mountPath: /local/data/ssh-key
             - name: git-content
               mountPath: /local/data/git
@@ -104,10 +104,10 @@ spec:
         - name: isaac-config
           secret:
             secretName: {{ .Values.etl.config.secretName }}
-        - name: isaac-ssh-key
+        - name: isaac-content-key
           secret:
             defaultMode: 0400
-            secretName: {{ .Values.etl.config.sshSecretName }}
+            secretName: {{ .Values.etl.config.contentKeySecretName }}
         - name: git-content
           emptyDir: {}
         - name: content-indices
