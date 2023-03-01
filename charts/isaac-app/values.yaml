@@ -4,11 +4,11 @@
 nameOverride: ""
 fullnameOverride: ""
 contentRepo:
-  url: git@github.com:isaaccomputerscience/rutherford-content.git
+  url: git@github.com:isaaccomputerscience/isaac-content.git
   depth: 1000
   wait: 60
-  liveSha: 542dc78f3d5cc3a5514f62bdc6093d9a772a2f72
-  latestSha: e1909b05d08fecd5b34984f52f38f6a75754c915
+  liveSha: fbb01c97c3210f77b4420ed043ebbac80f7200d3
+  latestSha: fbb01c97c3210f77b4420ed043ebbac80f7200d3
 
 isaac-app-fe:
   image:
@@ -120,7 +120,7 @@ isaac-content-editor:
     - name: REACT_APP_GITHUB_OWNER
       value: isaaccomputerscience
     - name: REACT_APP_CONTENT_REPO
-      value: rutherford-content
+      value: isaac-content
     - name: REACT_APP_PREVIEW_HOST
       value: https://editor-preview.non-prod.isaaccomputerscience.org
     - name: REACT_APP_API_STAGING_HOST
