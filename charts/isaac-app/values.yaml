@@ -333,3 +333,55 @@ editorAuth:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+shortUrlIngress:
+  name: "short-url-ingress"
+  enabled: enabled
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.org/server-snippets: |
+      location /q/ {
+            rewrite ^/q/(.*)$ https://www.non-prod.isaaccomputerscience.org/questions/$1 permanent;
+      }
+
+      location /bq/ {
+          rewrite ^/bq/(.*)$ https://www.non-prod.isaaccomputerscience.org/questions/$1?utm_source=book&utm_medium=book&utm_campaign=workbook_link;
+      }
+
+      location /eq/ {
+          rewrite ^/eq/(.*)$ https://www.non-prod.isaaccomputerscience.org/questions/$1?utm_source=ebook&utm_medium=ebook&utm_campaign=workbook_link;
+      }
+
+      location /c/ {
+          rewrite ^/c/(.*)$ https://www.non-prod.isaaccomputerscience.org/concepts/$1 permanent;
+      }
+
+      location /p/ {
+          rewrite ^/p/(.*)$ https://www.non-prod.isaaccomputerscience.org/pages/$1 permanent;
+      }
+
+      location /t/ {
+          rewrite ^/t/(.*)$ https://www.non-prod.isaaccomputerscience.org/topics/$1 permanent;
+      }
+
+      location /e/ {
+          rewrite ^/e/(.*)$ https://www.non-prod.isaaccomputerscience.org/events/$1 permanent;
+      }
+
+      location /a/ {
+          rewrite ^/a/(.*)$ https://www.non-prod.isaaccomputerscience.org/assignment/$1 permanent;
+      }
+
+      location /g/ {
+          rewrite ^/g/(.*)$ https://www.non-prod.isaaccomputerscience.org/gameboards#$1 permanent;
+      }
+
+      location /join/ {
+          rewrite ^/join/(.*)$ https://www.non-prod.isaaccomputerscience.org/account?authToken=$1 permanent;
+      }
+
+      location / {
+          return 301 https://www.non-prod.isaaccomputerscience.org$request_uri;
+      }
+  host: short.non-prod.isaaccomputerscience.org
