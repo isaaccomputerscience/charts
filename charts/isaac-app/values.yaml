@@ -33,6 +33,12 @@ isaac-app-fe:
       nginx.ingress.kubernetes.io/configuration-snippet: |
         more_set_headers "Content-Security-Policy: default-src 'self' wss://www.non-prod.isaaccomputerscience.org https://cdn.non-prod.isaaccomputerscience.org https://www.google-analytics.com https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://content-editor.non-prod.isaaccomputerscience.org  https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://www.google-analytics.com https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.www.non-prod.isaaccomputerscience.org https://fonts.gstatic.com;";
   resources: {}
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPU: 50
+    targetMemory: 50
 
 isaac-cdn:
   image:
@@ -215,6 +221,12 @@ api:
   affinity: {}
   gitSync:
     resources: {}
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPU: 50
+    targetMemory: 50
 
 etl:
   name: "etl"
@@ -243,6 +255,12 @@ etl:
   affinity: {}
   gitSync:
     resources: {}
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPU: 50
+    targetMemory: 50
 
 eqChecker:
   name: "equality-checker"
