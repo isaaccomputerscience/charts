@@ -154,15 +154,17 @@ isaac-code-editor:
 elastic-search:
   protocol: http
   createCert: false
-  imageTag: 7.17.6
   esConfig:
     elasticsearch.yml: |
       xpack.security.enabled: false
       xpack.security.transport.ssl.enabled: false
+      ingest.geoip.downloader.enabled: false
   clusterName: isaac-cs-content
-  persistence:
-    enabled: false
   replicas: 1
+  volumeClaimTemplate:
+    resources:
+      requests:
+        storage: 5Gi
   extraEnvs:
     - name: ELASTIC_PASSWORD
       valueFrom:
