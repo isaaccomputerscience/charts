@@ -154,6 +154,7 @@ isaac-code-editor:
 elastic-search:
   protocol: http
   createCert: false
+  imageTag: 7.17.6
   esConfig:
     elasticsearch.yml: |
       xpack.security.enabled: false
