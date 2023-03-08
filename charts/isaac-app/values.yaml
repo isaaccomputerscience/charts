@@ -8,7 +8,6 @@ contentRepo:
   depth: 1000
   wait: 60
   liveSha: fbb01c97c3210f77b4420ed043ebbac80f7200d3
-  latestSha: fbb01c97c3210f77b4420ed043ebbac80f7200d3
 
 isaac-app-fe:
   image:
@@ -168,10 +167,9 @@ elastic-search:
       ingest.geoip.downloader.enabled: false
   clusterName: isaac-cs-content
   replicas: 1
-  volumeClaimTemplate:
-    resources:
-      requests:
-        storage: 5Gi
+  persistence:
+    enabled: false
+
   extraEnvs:
     - name: ELASTIC_PASSWORD
       valueFrom:

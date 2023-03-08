@@ -66,7 +66,6 @@ A Helm chart for Isaac Computer Science
 | chemChecker.service.type | string | `"ClusterIP"` |  |
 | chemChecker.tolerations | list | `[]` |  |
 | contentRepo.depth | int | `1000` |  |
-| contentRepo.latestSha | string | `"e1909b05d08fecd5b34984f52f38f6a75754c915"` |  |
 | contentRepo.liveSha | string | `"542dc78f3d5cc3a5514f62bdc6093d9a772a2f72"` |  |
 | contentRepo.url | string | `"git@github.com:isaaccomputerscience/rutherford-content.git"` |  |
 | contentRepo.wait | int | `60` |  |
