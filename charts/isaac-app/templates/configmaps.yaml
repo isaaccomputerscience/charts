@@ -8,4 +8,3 @@ metadata:
 data:
   content-indices.properties: |
     live={{ .Values.contentRepo.liveSha }}
-    latest={{ .Values.contentRepo.latestSha }}
