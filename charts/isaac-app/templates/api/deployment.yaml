@@ -48,6 +48,8 @@ spec:
           env:
             - name: SEGUE_CONFIG_LOCATION
               value: /local/data/conf/segue-config.properties
+            - name: JAVA_OPTIONS
+              value: {{ .Values.api.javaOptions }}
           livenessProbe:
             httpGet:
               path: /isaac-api/api/info/segue_version

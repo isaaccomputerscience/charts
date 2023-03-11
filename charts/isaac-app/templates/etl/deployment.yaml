@@ -37,6 +37,8 @@ spec:
           env:
             - name: SEGUE_CONFIG_LOCATION
               value: /local/data/conf/segue-config.properties
+            - name: JAVA_OPTIONS
+              value: {{ .Values.etl.javaOptions }}
           livenessProbe:
             httpGet:
               path: /isaac-api/api/etl/ping
