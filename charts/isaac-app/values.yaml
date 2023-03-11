@@ -186,6 +186,7 @@ api:
     tag: v1.0.0
     pullPolicy: IfNotPresent
   imagePullSecrets: []
+  javaOptions: "-Xmx2g"
   config:
     secretName: isaac-secrets
     contentKeySecretName: isaac-content-key
@@ -237,6 +238,7 @@ etl:
     tag: v1.0.0
     pullPolicy: IfNotPresent
   imagePullSecrets: []
+  javaOptions: "-Xmx2g"
   config:
     apiVersion: v3.3.2-snapshot
     secretName: isaac-secrets
