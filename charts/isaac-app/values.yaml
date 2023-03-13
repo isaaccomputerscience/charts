@@ -8,6 +8,7 @@ contentRepo:
   depth: 1000
   wait: 60
   liveSha: fbb01c97c3210f77b4420ed043ebbac80f7200d3
+  taskPeriodSeconds: 60
 
 isaac-app-fe:
   image:

@@ -8,3 +8,4 @@ metadata:
 data:
   content-indices.properties: |
     live={{ .Values.contentRepo.liveSha }}
+    TASK_PERIOD_SECONDS={{ .Values.contentRepo.taskPeriodSeconds }}
