@@ -18,8 +18,8 @@ spec:
   metrics:
     {{- if .Values.api.autoscaling.targetMemory }}
     - type: ContainerResource
-      container: {{ .Chart.Name }}
-      resource:
+      containerResource:
+        container: {{ .Chart.Name }}
         name: memory
         target:
           type: Utilization
@@ -27,8 +27,8 @@ spec:
     {{- end }}
     {{- if .Values.api.autoscaling.targetCPU }}
     - type: ContainerResource
-      container: {{ .Chart.Name }}
-      resource:
+      containerResource:
+        container: {{ .Chart.Name }}
         name: cpu
         target:
           type: Utilization
