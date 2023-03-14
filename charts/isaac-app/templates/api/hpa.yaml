@@ -10,6 +10,11 @@ spec:
     name: {{ include "isaac-app.api.fullname" . }}
   minReplicas: {{ .Values.api.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.api.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      {{- toYaml .Values.api.autoscaling.scaleUp | nindent 6 }}
+    scaleDown:
+      {{- toYaml .Values.api.autoscaling.scaleDown | nindent 6 }}
   metrics:
     {{- if .Values.api.autoscaling.targetMemory }}
     - type: Resource

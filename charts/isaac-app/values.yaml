@@ -230,6 +230,10 @@ api:
     maxReplicas: 10
     targetCPU: 50
     targetMemory: 50
+    scaleUp:
+      stabilizationWindowSeconds: 300
+    scaleDown:
+      stabilizationWindowSeconds: 300
 
 etl:
   name: "etl"
