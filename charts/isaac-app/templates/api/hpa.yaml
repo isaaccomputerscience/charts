@@ -17,8 +17,7 @@ spec:
       {{- toYaml .Values.api.autoscaling.scaleDown | nindent 6 }}
   metrics:
     {{- if .Values.api.autoscaling.targetMemory }}
-    - type: ContainerResource
-      container: {{ .Chart.Name }}
+    - type: Resource
       resource:
         name: memory
         target:
@@ -26,8 +25,7 @@ spec:
           averageUtilization: {{ .Values.api.autoscaling.targetMemory }}
     {{- end }}
     {{- if .Values.api.autoscaling.targetCPU }}
-    - type: ContainerResource
-      container: {{ .Chart.Name }}
+    - type: Resource
       resource:
         name: cpu
         target:
