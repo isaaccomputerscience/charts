@@ -230,7 +230,7 @@ api:
     targetCPU: 50
     targetMemory: 50
     scaleUp:
-      stabilizationWindowSeconds: 300
+      stabilizationWindowSeconds: 0
     scaleDown:
       stabilizationWindowSeconds: 300
 
