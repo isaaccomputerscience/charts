@@ -10,7 +10,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.api.replicaCount }}
+  replicas: {{ .Values.api.autoscaling.minReplicas }}
   selector:
     matchLabels:
       {{- include "isaac-app.api.selectorLabels" . | nindent 6 }}
