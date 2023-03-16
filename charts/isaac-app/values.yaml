@@ -12,8 +12,8 @@ contentRepo:
 
 isaac-app-fe:
   image:
-    registry: ghcr.io
-    repository: isaaccomputerscience/isaac-react-app-cs
+    registry: null # Set to null so we can use `repository` for Argo image updater's `image-name` annotation.
+    repository: gchr.io/isaaccomputerscience/isaac-react-app-cs
     tag: v1.0.0
   service:
     type: ClusterIP
@@ -31,7 +31,7 @@ isaac-app-fe:
       # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
       # completed: https://github.com/kubernetes/ingress-nginx/issues/7811
       nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "Content-Security-Policy: default-src 'self' wss://www.non-prod.isaaccomputerscience.org https://cdn.non-prod.isaaccomputerscience.org https://www.google-analytics.com https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://content-editor.non-prod.isaaccomputerscience.org  https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://www.google-analytics.com https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.www.non-prod.isaaccomputerscience.org https://fonts.gstatic.com;";
+        more_set_headers "Content-Security-Policy: default-src 'self' wss://*.isaaccomputerscience.org https://*.isaaccomputerscience.org https://www.google-analytics.com https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://*.non-prod.isaaccomputerscience.org  https://www.youtube-nocookie.com; img-src 'self' data: https://*.isaaccomputerscience.org https://www.google-analytics.com https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://*.isaaccomputerscience.org https://fonts.gstatic.com;";
   resources: {}
   autoscaling:
     enabled: true
@@ -42,8 +42,8 @@ isaac-app-fe:
 
 isaac-cdn:
   image:
-    registry: ghcr.io
-    repository: isaaccomputerscience/isaac-cdn
+    registry: null
+    repository: ghcr.io/isaaccomputerscience/isaac-cdn
     tag: v1.0.0
   service:
     type: ClusterIP
@@ -64,8 +64,8 @@ isaac-cdn:
 
 isaac-app-renderer:
   image:
-    registry: ghcr.io
-    repository: isaaccomputerscience/isaac-react-app-cs-renderer
+    registry: null
+    repository: ghcr.io/isaaccomputerscience/isaac-react-app-cs-renderer
     tag: v1.0.0
   service:
     type: ClusterIP
@@ -83,7 +83,7 @@ isaac-app-renderer:
       # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
       # completed: https://github.com/kubernetes/ingress-nginx/issues/7811
       nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "Content-Security-Policy: default-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://www.staging.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://content-editor.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://www.staging.non-prod.isaaccomputerscience.org https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://fonts.gstatic.com; frame-ancestors 'self' https://content-editor.non-prod.isaaccomputerscience.org;";
+        more_set_headers "Content-Security-Policy: default-src 'self' https://*.isaaccomputerscience.org https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://*.isaaccomputerscience.org https://www.youtube-nocookie.com; img-src 'self' data: https://*.isaaccomputerscience.org https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://*.isaaccomputerscience.org https://fonts.gstatic.com; frame-ancestors 'self' https://*.isaaccomputerscience.org;";
     extraTls:
       - hosts:
           - editor-preview.non-prod.isaaccomputerscience.org
@@ -92,8 +92,8 @@ isaac-app-renderer:
 
 isaac-content-editor:
   image:
-    registry: ghcr.io
-    repository: isaaccomputerscience/isaac-content-editor
+    registry: null
+    repository: ghcr.io/isaaccomputerscience/isaac-content-editor
     tag: v1.0.0
   service:
     type: ClusterIP
@@ -111,7 +111,7 @@ isaac-content-editor:
       # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
       # completed: https://github.com/kubernetes/ingress-nginx/issues/7811
       nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "Content-Security-Policy: default-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://staging.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com https://www.youtube.com https://api.github.com https://editor-auth.non-prod.isaaccomputerscience.org object-src 'none'; frame-src 'self' https://editor-preview.non-prod.isaaccomputerscience.org https://content-editor.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://fonts.gstatic.com;";
+        more_set_headers "Content-Security-Policy: default-src 'self' https://*.isaaccomputerscience.org https://www.youtube-nocookie.com https://www.youtube.com https://api.github.com object-src 'none'; frame-src 'self' https://*.isaaccomputerscience.org https://www.youtube-nocookie.com; img-src 'self' data: https://*.isaaccomputerscience.org https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://*.isaaccomputerscience.org https://fonts.gstatic.com;";
     extraTls:
       - hosts:
           - content-editor.non-prod.isaaccomputerscience.org
@@ -137,8 +137,8 @@ isaac-content-editor:
 
 isaac-code-editor:
   image:
-    registry: ghcr.io
-    repository: isaaccomputerscience/isaac-code-editor
+    registry: null
+    repository: ghcr.io/isaaccomputerscience/isaac-code-editor
     tag: v1.0.0
   service:
     type: ClusterIP
