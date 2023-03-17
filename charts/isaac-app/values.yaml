@@ -12,8 +12,8 @@ contentRepo:
 
 isaac-app-fe:
   image:
-    registry: null # Set to null so we can use `repository` for Argo image updater's `image-name` annotation.
-    repository: gchr.io/isaaccomputerscience/isaac-react-app-cs
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-react-app-cs
     tag: v1.0.0
   service:
     type: ClusterIP
@@ -42,8 +42,8 @@ isaac-app-fe:
 
 isaac-cdn:
   image:
-    registry: null
-    repository: ghcr.io/isaaccomputerscience/isaac-cdn
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-cdn
     tag: v1.0.0
   service:
     type: ClusterIP
@@ -64,8 +64,8 @@ isaac-cdn:
 
 isaac-app-renderer:
   image:
-    registry: null
-    repository: ghcr.io/isaaccomputerscience/isaac-react-app-cs-renderer
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-react-app-cs-renderer
     tag: v1.0.0
   service:
     type: ClusterIP
@@ -92,8 +92,8 @@ isaac-app-renderer:
 
 isaac-content-editor:
   image:
-    registry: null
-    repository: ghcr.io/isaaccomputerscience/isaac-content-editor
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-content-editor
     tag: v1.0.0
   service:
     type: ClusterIP
@@ -137,8 +137,8 @@ isaac-content-editor:
 
 isaac-code-editor:
   image:
-    registry: null
-    repository: ghcr.io/isaaccomputerscience/isaac-code-editor
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-code-editor
     tag: v1.0.0
   service:
     type: ClusterIP
@@ -182,7 +182,8 @@ elastic-search:
 api:
   name: "api"
   image:
-    repository: ghcr.io/isaaccomputerscience/isaac-api
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-api
     tag: v1.0.0
     pullPolicy: IfNotPresent
   imagePullSecrets: []
@@ -239,7 +240,8 @@ etl:
   name: "etl"
   replicaCount: 1
   image:
-    repository: ghcr.io/isaaccomputerscience/isaac-api-etl
+    registry: ghcr.io
+    repository: isaaccomputerscience/isaac-api-etl
     tag: v1.0.0
     pullPolicy: IfNotPresent
   imagePullSecrets: []
