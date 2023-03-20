@@ -28,7 +28,7 @@ spec:
         fsGroup: 999
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.etl.image.registry }}/{{ .Values.etl.image.repository }}:{{ .Values.etl.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.etl.image.repository }}:{{ .Values.etl.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.etl.image.pullPolicy }}
           ports:
             - name: http
