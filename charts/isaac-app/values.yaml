@@ -182,8 +182,7 @@ elastic-search:
 api:
   name: "api"
   image:
-    registry: ghcr.io
-    repository: isaaccomputerscience/isaac-api
+    repository: ghcr.io/isaaccomputerscience/isaac-api
     tag: v1.0.0
     pullPolicy: IfNotPresent
   imagePullSecrets: []
@@ -241,8 +240,7 @@ etl:
   name: "etl"
   replicaCount: 1
   image:
-    registry: ghcr.io
-    repository: isaaccomputerscience/isaac-api-etl
+    repository: ghcr.io/isaaccomputerscience/isaac-api-etl
     tag: v1.0.0
     pullPolicy: IfNotPresent
   imagePullSecrets: []
