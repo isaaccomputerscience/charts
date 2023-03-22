@@ -20,25 +20,17 @@ isaac-app-fe:
   containerPorts:
     http: 80
   ingress:
-    enabled: true
-    ingressClassName: nginx
-    hostname: www.non-prod.isaaccomputerscience.org
+    enabled: false
     path: "/"
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      # NOTE: Using configuration-snippet in a multitenant cluster has security risks, see https://github.com/kubernetes/ingress-nginx/issues/7837
-      # Since we are installing this in a non multitenant cluster and we assume all invididuals with access to the ArgoCD repo are admins, we
-      # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
-      # completed: https://github.com/kubernetes/ingress-nginx/issues/7811
-      nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "Content-Security-Policy: default-src 'self' wss://*.isaaccomputerscience.org https://*.isaaccomputerscience.org https://www.google-analytics.com https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://*.isaaccomputerscience.org  https://www.youtube-nocookie.com; img-src 'self' data: https://*.isaaccomputerscience.org https://www.google-analytics.com https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://*.isaaccomputerscience.org https://fonts.gstatic.com;";
-  resources: {}
+    ingressClassName: nginx
+    annotations: {}
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
     maxReplicas: 10
-    targetCPU: 60
-    targetMemory: 50
+    targetCPU: 100
+    targetMemory: 75
+  resources: {}
 
 isaac-cdn:
   image:
@@ -50,16 +42,10 @@ isaac-cdn:
   containerPorts:
     http: 80
   ingress:
-    enabled: true
-    ingressClassName: nginx
-    hostname: cdn.non-prod.isaaccomputerscience.org
+    enabled: false
     path: "/"
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-    extraTls:
-      - hosts:
-          - cdn.non-prod.isaaccomputerscience.org
-        secretName: cdn-isaac
+    ingressClassName: nginx
+    annotations: {}
   resources: {}
 
 isaac-app-renderer:
@@ -72,22 +58,10 @@ isaac-app-renderer:
   containerPorts:
     http: 80
   ingress:
-    enabled: true
-    ingressClassName: nginx
-    hostname: editor-preview.non-prod.isaaccomputerscience.org
+    enabled: false
     path: "/"
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      # NOTE: Using configuration-snippet in a multitenant cluster has security risks, see https://github.com/kubernetes/ingress-nginx/issues/7837
-      # Since we are installing this in a non multitenant cluster and we assume all invididuals with access to the ArgoCD repo are admins, we
-      # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
-      # completed: https://github.com/kubernetes/ingress-nginx/issues/7811
-      nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "Content-Security-Policy: default-src 'self' https://*.isaaccomputerscience.org https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://*.isaaccomputerscience.org https://www.youtube-nocookie.com; img-src 'self' data: https://*.isaaccomputerscience.org https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://*.isaaccomputerscience.org https://fonts.gstatic.com; frame-ancestors 'self' https://*.isaaccomputerscience.org;";
-    extraTls:
-      - hosts:
-          - editor-preview.non-prod.isaaccomputerscience.org
-        secretName: editor-preview-isaac
+    ingressClassName: nginx
+    annotations: {}
   resources: {}
 
 isaac-content-editor:
@@ -100,39 +74,10 @@ isaac-content-editor:
   containerPorts:
     http: 80
   ingress:
-    enabled: true
-    ingressClassName: nginx
-    hostname: content-editor.non-prod.isaaccomputerscience.org
+    enabled: false
     path: "/"
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      # NOTE: Using configuration-snippet in a multitenant cluster has security risks, see https://github.com/kubernetes/ingress-nginx/issues/7837
-      # Since we are installing this in a non multitenant cluster and we assume all invididuals with access to the ArgoCD repo are admins, we
-      # decided this CVE does not present a security risk. A more secure workaround is in development and should be migrated to once it is
-      # completed: https://github.com/kubernetes/ingress-nginx/issues/7811
-      nginx.ingress.kubernetes.io/configuration-snippet: |
-        more_set_headers "Content-Security-Policy: default-src 'self' https://*.isaaccomputerscience.org https://www.youtube-nocookie.com https://www.youtube.com https://api.github.com; object-src 'none'; frame-src 'self' https://*.isaaccomputerscience.org https://www.youtube-nocookie.com; img-src 'self' data: https://*.isaaccomputerscience.org https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://*.isaaccomputerscience.org https://fonts.gstatic.com;";
-    extraTls:
-      - hosts:
-          - content-editor.non-prod.isaaccomputerscience.org
-        secretName: content-editor-isaac
-  extraEnvVars:
-    - name: REACT_APP_SITE
-      value: CS
-    - name: REACT_APP_CLIENT_ID
-      value: f1540415e26cc2a5765a
-    - name: REACT_APP_AUTH_URL
-      value: https://editor-auth.non-prod.isaaccomputerscience.org/access_token
-    - name: REACT_APP_GITHUB_OWNER
-      value: isaaccomputerscience
-    - name: REACT_APP_CONTENT_REPO
-      value: isaac-content
-    - name: REACT_APP_PREVIEW_HOST
-      value: https://editor-preview.non-prod.isaaccomputerscience.org
-    - name: REACT_APP_API_STAGING_HOST
-      value: https://www.staging.non-prod.isaaccomputerscience.org
-    - name: REACT_APP_API_HOST
-      value: https://www.non-prod.isaaccomputerscience.org
+    ingressClassName: nginx
+    annotations: {}
   resources: {}
 
 isaac-code-editor:
@@ -145,16 +90,10 @@ isaac-code-editor:
   containerPorts:
     http: 80
   ingress:
-    enabled: true
-    ingressClassName: nginx
-    hostname: code-editor.non-prod.isaaccomputerscience.org
+    enabled: false
     path: "/"
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-    extraTls:
-      - hosts:
-          - code-editor.non-prod.isaaccomputerscience.org
-        secretName: code-editor-isaac
+    ingressClassName: nginx
+    annotations: {}
   resources: {}
 
 elastic-search:
@@ -170,13 +109,6 @@ elastic-search:
   replicas: 1
   persistence:
     enabled: false
-
-  extraEnvs:
-    - name: ELASTIC_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: isaac-secrets
-          key: elasticsearch-pw
   resources: {}
 
 api:
@@ -186,55 +118,43 @@ api:
     tag: v1.0.0
     pullPolicy: IfNotPresent
   imagePullSecrets: []
+  ingress:
+    enabled: false
+    className: "nginx"
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /isaac-api/$2
+      nginx.ingress.kubernetes.io/proxy-cookie-path: /isaac-api /
+    hosts: []
+    tls: []
   javaOptions: "-Xmx2g"
   config:
-    secretName: isaac-secrets
-    contentKeySecretName: isaac-content-key
+    secretName: ""
+    contentKeySecretName: ""
   prometheusExport:
-    enabled: true
+    enabled: false
     path: /
     port: 9966
   service:
     type: ClusterIP
     port: 80
   deployment:
-    annotations:
-      secret.reloader.stakater.com/reload: "isaac-secrets,isaac-content-key"
-      configmap.reloader.stakater.com/reload: "isaac-app-content-indices"
-  ingress:
-    enabled: enabled
-    className: "nginx"
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      nginx.ingress.kubernetes.io/rewrite-target: /isaac-api/$2
-      nginx.ingress.kubernetes.io/proxy-cookie-path: /isaac-api /
-      nginx.ingress.kubernetes.io/enable-cors: "true"
-      nginx.ingress.kubernetes.io/cors-allow-origin: "https://*.isaaccomputerscience.org"
-    hosts:
-      - host: www.non-prod.isaaccomputerscience.org
-        paths:
-          - path: /api/([^/]+)/(.*)$
-            pathType: Prefix
-    tls:
-      - secretName: www-isaac
-        hosts:
-          - www.non-prod.isaaccomputerscience.org
-  resources: {}
+    annotations: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  gitSync:
-    resources: {}
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
     maxReplicas: 10
-    targetCPU: 50
-    targetMemory: 50
+    targetCPU: 100
+    targetMemory: 75
     scaleUp:
       stabilizationWindowSeconds: 0
     scaleDown:
       stabilizationWindowSeconds: 300
+  resources: {}
+  gitSync:
+    resources: {}
 
 etl:
   name: "etl"
@@ -246,22 +166,19 @@ etl:
   imagePullSecrets: []
   javaOptions: "-Xmx2g"
   config:
-    apiVersion: v3.3.2-snapshot
-    secretName: isaac-secrets
-    contentKeySecretName: isaac-content-key
+    secretName: ""
+    contentKeySecretName: ""
   service:
     type: ClusterIP
     port: 80
   deployment:
-    annotations:
-      secret.reloader.stakater.com/reload: "isaac-secrets,isaac-content-key"
-      configmap.reloader.stakater.com/reload: "isaac-app-content-indices"
+    annotations: {}
   ingress:
     enabled: false
-  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  resources: {}
   gitSync:
     resources: {}
 
@@ -270,26 +187,19 @@ eqChecker:
   replicaCount: 1
   image:
     repository: ucamcldtg/equality-checker
-    tag: latest
-    pullPolicy: Always
+    tag: v0.13.0
+    pullPolicy: IfNotPresent
   imagePullSecrets: []
   podAnnotations: {}
   podSecurityContext: {}
-  # fsGroup: 2000
   securityContext: {}
-    # capabilities:
-    #   drop:
-    #   - ALL
-    # readOnlyRootFilesystem: true
-    # runAsNonRoot: true
-  # runAsUser: 1000
   service:
     type: ClusterIP
     port: 80
-  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  resources: {}
 
 chemChecker:
   name: "chemistry-checker"
@@ -297,27 +207,20 @@ chemChecker:
   image:
     repository: ucamcldtg/chemistry-checker
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   imagePullSecrets: []
   podAnnotations: {}
   podSecurityContext: {}
-  # fsGroup: 2000
   securityContext: {}
-    # capabilities:
-    #   drop:
-    #   - ALL
-    # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
   service:
     type: ClusterIP
     port: 80
   ingress:
     enabled: false
-  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  resources: {}
 
 editorAuth:
   name: "editor-auth"
@@ -327,79 +230,25 @@ editorAuth:
     tag: v1.0.0
     pullPolicy: IfNotPresent
   imagePullSecrets: []
-  config:
-    allowOriginHeader: https://content-editor.non-prod.isaaccomputerscience.org
-    secretName: isaac-editor-auth-secrets
+  config: {}
   service:
     type: ClusterIP
     port: 80
   deployment:
-    annotations:
-      secret.reloader.stakater.com/reload: "isaac-editor-auth-secrets"
+    annotations: {}
   ingress:
-    enabled: enabled
+    enabled: false
     className: "nginx"
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-    hosts:
-      - host: editor-auth.non-prod.isaaccomputerscience.org
-        paths:
-          - path: /
-            pathType: Prefix
-    tls:
-      - secretName: editor-auth-isaac
-        hosts:
-          - editor-auth.non-prod.isaaccomputerscience.org
-  resources: {}
+    annotations: {}
+    hosts: []
+    tls: []
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  resources: {}
 
 shortUrlIngress:
   name: "short-url-ingress"
-  enabled: enabled
+  enabled: false
   className: "nginx"
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/permanent-redirect: https://www.non-prod.isaaccomputerscience.org$request_uri
-    nginx.ingress.kubernetes.io/server-snippet: |
-      location /q/ {
-            rewrite ^/q/(.*)$ https://www.non-prod.isaaccomputerscience.org/questions/$1 permanent;
-      }
-
-      location /bq/ {
-          rewrite ^/bq/(.*)$ https://www.non-prod.isaaccomputerscience.org/questions/$1?utm_source=book&utm_medium=book&utm_campaign=workbook_link;
-      }
-
-      location /eq/ {
-          rewrite ^/eq/(.*)$ https://www.non-prod.isaaccomputerscience.org/questions/$1?utm_source=ebook&utm_medium=ebook&utm_campaign=workbook_link;
-      }
-
-      location /c/ {
-          rewrite ^/c/(.*)$ https://www.non-prod.isaaccomputerscience.org/concepts/$1 permanent;
-      }
-
-      location /p/ {
-          rewrite ^/p/(.*)$ https://www.non-prod.isaaccomputerscience.org/pages/$1 permanent;
-      }
-
-      location /t/ {
-          rewrite ^/t/(.*)$ https://www.non-prod.isaaccomputerscience.org/topics/$1 permanent;
-      }
-
-      location /e/ {
-          rewrite ^/e/(.*)$ https://www.non-prod.isaaccomputerscience.org/events/$1 permanent;
-      }
-
-      location /a/ {
-          rewrite ^/a/(.*)$ https://www.non-prod.isaaccomputerscience.org/assignment/$1 permanent;
-      }
-
-      location /g/ {
-          rewrite ^/g/(.*)$ https://www.non-prod.isaaccomputerscience.org/gameboards#$1 permanent;
-      }
-
-      location /join/ {
-          rewrite ^/join/(.*)$ https://www.non-prod.isaaccomputerscience.org/account?authToken=$1 permanent;
-      }
-  host: short.non-prod.isaaccomputerscience.org
+  annotations: {}
