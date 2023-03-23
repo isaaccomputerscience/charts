@@ -1,8 +1,8 @@
 # isaac-app
 
-![Version: 1.1.11](https://img.shields.io/badge/Version-1.1.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
-A Helm chart for Isaac Computer Science
+A Helm chart for Kubernetes
 
 ## Requirements
 
@@ -20,37 +20,39 @@ A Helm chart for Isaac Computer Science
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | api.affinity | object | `{}` |  |
-| api.config.secretName | string | `"isaac-secrets"` |  |
-| api.config.sshSecretName | string | `"isaac-ssh-key"` |  |
-| api.deployment.annotations."configmap.reloader.stakater.com/reload" | string | `"isaac-app-content-indices"` |  |
-| api.deployment.annotations."secret.reloader.stakater.com/reload" | string | `"isaac-secrets,isaac-ssh-key"` |  |
+| api.autoscaling.enabled | bool | `false` |  |
+| api.autoscaling.maxReplicas | int | `10` |  |
+| api.autoscaling.minReplicas | int | `1` |  |
+| api.autoscaling.scaleDown.stabilizationWindowSeconds | int | `300` |  |
+| api.autoscaling.scaleUp.stabilizationWindowSeconds | int | `0` |  |
+| api.autoscaling.targetCPU | int | `100` |  |
+| api.autoscaling.targetMemory | int | `75` |  |
+| api.config.contentKeySecretName | string | `""` |  |
+| api.config.secretName | string | `""` |  |
+| api.deployment.annotations | object | `{}` |  |
 | api.gitSync.resources | object | `{}` |  |
 | api.image.pullPolicy | string | `"IfNotPresent"` |  |
 | api.image.repository | string | `"ghcr.io/isaaccomputerscience/isaac-api"` |  |
 | api.image.tag | string | `"v1.0.0"` |  |
 | api.imagePullSecrets | list | `[]` |  |
-| api.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt-prod"` |  |
 | api.ingress.annotations."nginx.ingress.kubernetes.io/proxy-cookie-path" | string | `"/isaac-api /"` |  |
 | api.ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/isaac-api/$2"` |  |
 | api.ingress.className | string | `"nginx"` |  |
-| api.ingress.enabled | string | `"enabled"` |  |
-| api.ingress.hosts[0].host | string | `"www.non-prod.isaaccomputerscience.org"` |  |
-| api.ingress.hosts[0].paths[0].path | string | `"/api/([^/]+)/(.*)$"` |  |
-| api.ingress.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
-| api.ingress.tls[0].hosts[0] | string | `"www.non-prod.isaaccomputerscience.org"` |  |
-| api.ingress.tls[0].secretName | string | `"www-isaac"` |  |
+| api.ingress.enabled | bool | `false` |  |
+| api.ingress.hosts | list | `[]` |  |
+| api.ingress.tls | list | `[]` |  |
+| api.javaOptions | string | `"-Xmx2g"` |  |
 | api.name | string | `"api"` |  |
 | api.nodeSelector | object | `{}` |  |
-| api.prometheusExport.enabled | bool | `true` |  |
+| api.prometheusExport.enabled | bool | `false` |  |
 | api.prometheusExport.path | string | `"/"` |  |
 | api.prometheusExport.port | int | `9966` |  |
-| api.replicaCount | int | `1` |  |
 | api.resources | object | `{}` |  |
 | api.service.port | int | `80` |  |
 | api.service.type | string | `"ClusterIP"` |  |
 | api.tolerations | list | `[]` |  |
 | chemChecker.affinity | object | `{}` |  |
-| chemChecker.image.pullPolicy | string | `"Always"` |  |
+| chemChecker.image.pullPolicy | string | `"IfNotPresent"` |  |
 | chemChecker.image.repository | string | `"ucamcldtg/chemistry-checker"` |  |
 | chemChecker.image.tag | string | `"latest"` |  |
 | chemChecker.imagePullSecrets | list | `[]` |  |
@@ -66,25 +68,22 @@ A Helm chart for Isaac Computer Science
 | chemChecker.service.type | string | `"ClusterIP"` |  |
 | chemChecker.tolerations | list | `[]` |  |
 | contentRepo.depth | int | `1000` |  |
-| contentRepo.liveSha | string | `"542dc78f3d5cc3a5514f62bdc6093d9a772a2f72"` |  |
-| contentRepo.url | string | `"git@github.com:isaaccomputerscience/rutherford-content.git"` |  |
+| contentRepo.liveSha | string | `"fbb01c97c3210f77b4420ed043ebbac80f7200d3"` |  |
+| contentRepo.taskPeriodSeconds | int | `60` |  |
+| contentRepo.url | string | `"git@github.com:isaaccomputerscience/isaac-content.git"` |  |
 | contentRepo.wait | int | `60` |  |
 | editorAuth.affinity | object | `{}` |  |
-| editorAuth.config.allowOriginHeader | string | `"https://content-editor.non-prod.isaaccomputerscience.org"` |  |
-| editorAuth.config.secretName | string | `"isaac-editor-auth-secrets"` |  |
-| editorAuth.deployment.annotations."secret.reloader.stakater.com/reload" | string | `"isaac-editor-auth-secrets"` |  |
+| editorAuth.config | object | `{}` |  |
+| editorAuth.deployment.annotations | object | `{}` |  |
 | editorAuth.image.pullPolicy | string | `"IfNotPresent"` |  |
 | editorAuth.image.repository | string | `"ghcr.io/isaaccomputerscience/isaac-editor-auth"` |  |
 | editorAuth.image.tag | string | `"v1.0.0"` |  |
 | editorAuth.imagePullSecrets | list | `[]` |  |
-| editorAuth.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt-prod"` |  |
+| editorAuth.ingress.annotations | object | `{}` |  |
 | editorAuth.ingress.className | string | `"nginx"` |  |
-| editorAuth.ingress.enabled | string | `"enabled"` |  |
-| editorAuth.ingress.hosts[0].host | string | `"editor-auth.non-prod.isaaccomputerscience.org"` |  |
-| editorAuth.ingress.hosts[0].paths[0].path | string | `"/"` |  |
-| editorAuth.ingress.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
-| editorAuth.ingress.tls[0].hosts[0] | string | `"editor-auth.non-prod.isaaccomputerscience.org"` |  |
-| editorAuth.ingress.tls[0].secretName | string | `"editor-auth-isaac"` |  |
+| editorAuth.ingress.enabled | bool | `false` |  |
+| editorAuth.ingress.hosts | list | `[]` |  |
+| editorAuth.ingress.tls | list | `[]` |  |
 | editorAuth.name | string | `"editor-auth"` |  |
 | editorAuth.nodeSelector | object | `{}` |  |
 | editorAuth.replicaCount | int | `1` |  |
@@ -94,19 +93,16 @@ A Helm chart for Isaac Computer Science
 | editorAuth.tolerations | list | `[]` |  |
 | elastic-search.clusterName | string | `"isaac-cs-content"` |  |
 | elastic-search.createCert | bool | `false` |  |
-| elastic-search.esConfig."elasticsearch.yml" | string | `"xpack.security.enabled: false\nxpack.security.transport.ssl.enabled: false\n"` |  |
-| elastic-search.extraEnvs[0].name | string | `"ELASTIC_PASSWORD"` |  |
-| elastic-search.extraEnvs[0].valueFrom.secretKeyRef.key | string | `"elasticsearch-pw"` |  |
-| elastic-search.extraEnvs[0].valueFrom.secretKeyRef.name | string | `"isaac-secrets"` |  |
+| elastic-search.esConfig."elasticsearch.yml" | string | `"xpack.security.enabled: false\nxpack.security.transport.ssl.enabled: false\ningest.geoip.downloader.enabled: false\n"` |  |
 | elastic-search.imageTag | string | `"7.17.6"` |  |
 | elastic-search.persistence.enabled | bool | `false` |  |
 | elastic-search.protocol | string | `"http"` |  |
 | elastic-search.replicas | int | `1` |  |
 | elastic-search.resources | object | `{}` |  |
 | eqChecker.affinity | object | `{}` |  |
-| eqChecker.image.pullPolicy | string | `"Always"` |  |
+| eqChecker.image.pullPolicy | string | `"IfNotPresent"` |  |
 | eqChecker.image.repository | string | `"ucamcldtg/equality-checker"` |  |
-| eqChecker.image.tag | string | `"latest"` |  |
+| eqChecker.image.tag | string | `"v0.13.0"` |  |
 | eqChecker.imagePullSecrets | list | `[]` |  |
 | eqChecker.name | string | `"equality-checker"` |  |
 | eqChecker.nodeSelector | object | `{}` |  |
@@ -119,17 +115,16 @@ A Helm chart for Isaac Computer Science
 | eqChecker.service.type | string | `"ClusterIP"` |  |
 | eqChecker.tolerations | list | `[]` |  |
 | etl.affinity | object | `{}` |  |
-| etl.config.apiVersion | string | `"v3.3.2-snapshot"` |  |
-| etl.config.secretName | string | `"isaac-secrets"` |  |
-| etl.config.sshSecretName | string | `"isaac-ssh-key"` |  |
-| etl.deployment.annotations."configmap.reloader.stakater.com/reload" | string | `"isaac-app-content-indices"` |  |
-| etl.deployment.annotations."secret.reloader.stakater.com/reload" | string | `"isaac-secrets,isaac-ssh-key"` |  |
+| etl.config.contentKeySecretName | string | `""` |  |
+| etl.config.secretName | string | `""` |  |
+| etl.deployment.annotations | object | `{}` |  |
 | etl.gitSync.resources | object | `{}` |  |
 | etl.image.pullPolicy | string | `"IfNotPresent"` |  |
 | etl.image.repository | string | `"ghcr.io/isaaccomputerscience/isaac-api-etl"` |  |
 | etl.image.tag | string | `"v1.0.0"` |  |
 | etl.imagePullSecrets | list | `[]` |  |
 | etl.ingress.enabled | bool | `false` |  |
+| etl.javaOptions | string | `"-Xmx2g"` |  |
 | etl.name | string | `"etl"` |  |
 | etl.nodeSelector | object | `{}` |  |
 | etl.replicaCount | int | `1` |  |
@@ -138,14 +133,17 @@ A Helm chart for Isaac Computer Science
 | etl.service.type | string | `"ClusterIP"` |  |
 | etl.tolerations | list | `[]` |  |
 | fullnameOverride | string | `""` |  |
+| isaac-app-fe.autoscaling.enabled | bool | `false` |  |
+| isaac-app-fe.autoscaling.maxReplicas | int | `10` |  |
+| isaac-app-fe.autoscaling.minReplicas | int | `1` |  |
+| isaac-app-fe.autoscaling.targetCPU | int | `100` |  |
+| isaac-app-fe.autoscaling.targetMemory | int | `75` |  |
 | isaac-app-fe.containerPorts.http | int | `80` |  |
 | isaac-app-fe.image.registry | string | `"ghcr.io"` |  |
 | isaac-app-fe.image.repository | string | `"isaaccomputerscience/isaac-react-app-cs"` |  |
 | isaac-app-fe.image.tag | string | `"v1.0.0"` |  |
-| isaac-app-fe.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt-prod"` |  |
-| isaac-app-fe.ingress.annotations."nginx.ingress.kubernetes.io/configuration-snippet" | string | `"more_set_headers \"Content-Security-Policy: default-src 'self' wss://www.non-prod.isaaccomputerscience.org https://cdn.non-prod.isaaccomputerscience.org https://www.google-analytics.com https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://content-editor.non-prod.isaaccomputerscience.org  https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://www.google-analytics.com https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.www.non-prod.isaaccomputerscience.org https://fonts.gstatic.com;\";\n"` |  |
-| isaac-app-fe.ingress.enabled | bool | `true` |  |
-| isaac-app-fe.ingress.hostname | string | `"www.non-prod.isaaccomputerscience.org"` |  |
+| isaac-app-fe.ingress.annotations | object | `{}` |  |
+| isaac-app-fe.ingress.enabled | bool | `false` |  |
 | isaac-app-fe.ingress.ingressClassName | string | `"nginx"` |  |
 | isaac-app-fe.ingress.path | string | `"/"` |  |
 | isaac-app-fe.resources | object | `{}` |  |
@@ -154,12 +152,8 @@ A Helm chart for Isaac Computer Science
 | isaac-app-renderer.image.registry | string | `"ghcr.io"` |  |
 | isaac-app-renderer.image.repository | string | `"isaaccomputerscience/isaac-react-app-cs-renderer"` |  |
 | isaac-app-renderer.image.tag | string | `"v1.0.0"` |  |
-| isaac-app-renderer.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt-prod"` |  |
-| isaac-app-renderer.ingress.annotations."nginx.ingress.kubernetes.io/configuration-snippet" | string | `"more_set_headers \"default-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://www.staging.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; frame-src 'self' https://content-editor.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://www.staging.non-prod.isaaccomputerscience.org https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://fonts.gstatic.com; frame-ancestors 'self' https://content-editor.non-prod.isaaccomputerscience.org;\";\n"` |  |
-| isaac-app-renderer.ingress.enabled | bool | `true` |  |
-| isaac-app-renderer.ingress.extraTls[0].hosts[0] | string | `"editor-preview.non-prod.isaaccomputerscience.org"` |  |
-| isaac-app-renderer.ingress.extraTls[0].secretName | string | `"editor-preview-isaac"` |  |
-| isaac-app-renderer.ingress.hostname | string | `"editor-preview.non-prod.isaaccomputerscience.org"` |  |
+| isaac-app-renderer.ingress.annotations | object | `{}` |  |
+| isaac-app-renderer.ingress.enabled | bool | `false` |  |
 | isaac-app-renderer.ingress.ingressClassName | string | `"nginx"` |  |
 | isaac-app-renderer.ingress.path | string | `"/"` |  |
 | isaac-app-renderer.resources | object | `{}` |  |
@@ -168,11 +162,8 @@ A Helm chart for Isaac Computer Science
 | isaac-cdn.image.registry | string | `"ghcr.io"` |  |
 | isaac-cdn.image.repository | string | `"isaaccomputerscience/isaac-cdn"` |  |
 | isaac-cdn.image.tag | string | `"v1.0.0"` |  |
-| isaac-cdn.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt-prod"` |  |
-| isaac-cdn.ingress.enabled | bool | `true` |  |
-| isaac-cdn.ingress.extraTls[0].hosts[0] | string | `"cdn.non-prod.isaaccomputerscience.org"` |  |
-| isaac-cdn.ingress.extraTls[0].secretName | string | `"cdn-isaac"` |  |
-| isaac-cdn.ingress.hostname | string | `"cdn.non-prod.isaaccomputerscience.org"` |  |
+| isaac-cdn.ingress.annotations | object | `{}` |  |
+| isaac-cdn.ingress.enabled | bool | `false` |  |
 | isaac-cdn.ingress.ingressClassName | string | `"nginx"` |  |
 | isaac-cdn.ingress.path | string | `"/"` |  |
 | isaac-cdn.resources | object | `{}` |  |
@@ -181,45 +172,27 @@ A Helm chart for Isaac Computer Science
 | isaac-code-editor.image.registry | string | `"ghcr.io"` |  |
 | isaac-code-editor.image.repository | string | `"isaaccomputerscience/isaac-code-editor"` |  |
 | isaac-code-editor.image.tag | string | `"v1.0.0"` |  |
-| isaac-code-editor.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt-prod"` |  |
-| isaac-code-editor.ingress.enabled | bool | `true` |  |
-| isaac-code-editor.ingress.extraTls[0].hosts[0] | string | `"code-editor.non-prod.isaaccomputerscience.org"` |  |
-| isaac-code-editor.ingress.extraTls[0].secretName | string | `"code-editor-isaac"` |  |
-| isaac-code-editor.ingress.hostname | string | `"code-editor.non-prod.isaaccomputerscience.org"` |  |
+| isaac-code-editor.ingress.annotations | object | `{}` |  |
+| isaac-code-editor.ingress.enabled | bool | `false` |  |
 | isaac-code-editor.ingress.ingressClassName | string | `"nginx"` |  |
 | isaac-code-editor.ingress.path | string | `"/"` |  |
 | isaac-code-editor.resources | object | `{}` |  |
 | isaac-code-editor.service.type | string | `"ClusterIP"` |  |
 | isaac-content-editor.containerPorts.http | int | `80` |  |
-| isaac-content-editor.extraEnvVars[0].name | string | `"REACT_APP_SITE"` |  |
-| isaac-content-editor.extraEnvVars[0].value | string | `"CS"` |  |
-| isaac-content-editor.extraEnvVars[1].name | string | `"REACT_APP_CLIENT_ID"` |  |
-| isaac-content-editor.extraEnvVars[1].value | string | `"f1540415e26cc2a5765a"` |  |
-| isaac-content-editor.extraEnvVars[2].name | string | `"REACT_APP_AUTH_URL"` |  |
-| isaac-content-editor.extraEnvVars[2].value | string | `"https://editor-auth.non-prod.isaaccomputerscience.org/access_token"` |  |
-| isaac-content-editor.extraEnvVars[3].name | string | `"REACT_APP_GITHUB_OWNER"` |  |
-| isaac-content-editor.extraEnvVars[3].value | string | `"isaaccomputerscience"` |  |
-| isaac-content-editor.extraEnvVars[4].name | string | `"REACT_APP_CONTENT_REPO"` |  |
-| isaac-content-editor.extraEnvVars[4].value | string | `"rutherford-content"` |  |
-| isaac-content-editor.extraEnvVars[5].name | string | `"REACT_APP_PREVIEW_HOST"` |  |
-| isaac-content-editor.extraEnvVars[5].value | string | `"https://editor-preview.non-prod.isaaccomputerscience.org"` |  |
-| isaac-content-editor.extraEnvVars[6].name | string | `"REACT_APP_API_STAGING_HOST"` |  |
-| isaac-content-editor.extraEnvVars[6].value | string | `"https://www.staging.non-prod.isaaccomputerscience.org"` |  |
-| isaac-content-editor.extraEnvVars[7].name | string | `"REACT_APP_API_HOST"` |  |
-| isaac-content-editor.extraEnvVars[7].value | string | `"https://www.non-prod.isaaccomputerscience.org"` |  |
 | isaac-content-editor.image.registry | string | `"ghcr.io"` |  |
 | isaac-content-editor.image.repository | string | `"isaaccomputerscience/isaac-content-editor"` |  |
 | isaac-content-editor.image.tag | string | `"v1.0.0"` |  |
-| isaac-content-editor.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt-prod"` |  |
-| isaac-content-editor.ingress.annotations."nginx.ingress.kubernetes.io/configuration-snippet" | string | `"more_set_headers \"default-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://staging.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com https://www.youtube.com https://api.github.com https://editor-auth.non-prod.isaaccomputerscience.org object-src 'none'; frame-src 'self' https://editor-preview.non-prod.isaaccomputerscience.org https://content-editor.non-prod.isaaccomputerscience.org https://www.youtube-nocookie.com; img-src 'self' data: https://cdn.non-prod.isaaccomputerscience.org https://*.tile.openstreetmap.org https://developers.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://cdn.non-prod.isaaccomputerscience.org https://fonts.gstatic.com;\";\n"` |  |
-| isaac-content-editor.ingress.enabled | bool | `true` |  |
-| isaac-content-editor.ingress.extraTls[0].hosts[0] | string | `"content-editor.non-prod.isaaccomputerscience.org"` |  |
-| isaac-content-editor.ingress.extraTls[0].secretName | string | `"content-editor-isaac"` |  |
-| isaac-content-editor.ingress.hostname | string | `"content-editor.non-prod.isaaccomputerscience.org"` |  |
+| isaac-content-editor.ingress.annotations | object | `{}` |  |
+| isaac-content-editor.ingress.enabled | bool | `false` |  |
 | isaac-content-editor.ingress.ingressClassName | string | `"nginx"` |  |
 | isaac-content-editor.ingress.path | string | `"/"` |  |
 | isaac-content-editor.resources | object | `{}` |  |
 | isaac-content-editor.service.type | string | `"ClusterIP"` |  |
 | nameOverride | string | `""` |  |
+| shortUrlIngress.annotations | object | `{}` |  |
+| shortUrlIngress.className | string | `"nginx"` |  |
+| shortUrlIngress.enabled | bool | `false` |  |
+| shortUrlIngress.name | string | `"short-url-ingress"` |  |
 
 ----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.11.0](https://github.com/norwoodj/helm-docs/releases/v1.11.0)
