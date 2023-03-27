@@ -24,10 +24,18 @@ spec:
   {{- if and .Values.shortUrlIngress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
   ingressClassName: {{ .Values.shortUrlIngress.className }}
   {{- end }}
+  {{- if .Values.shortUrlIngress.tls }}
   tls:
+    {{- range .Values.shortUrlIngress.tls }}
     - hosts:
-        - {{ .Values.shortUrlIngress.host }}
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
       secretName: {{ .Values.shortUrlIngress.name }}
+    {{- end }}
+  {{- end }}
   rules:
-    - host: {{ .Values.shortUrlIngress.host }}
+    {{- range .Values.shortUrlIngress.hosts }}
+    - host: {{ .host | quote }}
+    {{- end }}
 {{- end }}

@@ -251,4 +251,6 @@ shortUrlIngress:
   name: "short-url-ingress"
   enabled: false
   className: "nginx"
+  hosts: []
+  tls: []
   annotations: {}
