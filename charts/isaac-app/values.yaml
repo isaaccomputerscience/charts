@@ -124,6 +124,10 @@ api:
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /isaac-api/$2
       nginx.ingress.kubernetes.io/proxy-cookie-path: /isaac-api /
+      nginx.ingress.kubernetes.io/affinity: "cookie"
+      nginx.ingress.kubernetes.io/session-cookie-name: "api-sticky-session-cookie"
+      nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+      nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
     hosts: []
     tls: []
   javaOptions: "-Xmx2g"
