@@ -3,6 +3,41 @@ entries:
   isaac-app:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2023-03-28T16:00:18.87201603Z"
+    dependencies:
+    - alias: isaac-app-fe
+      name: nginx
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.2.18
+    - alias: isaac-cdn
+      name: nginx
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.2.18
+    - alias: isaac-app-renderer
+      name: nginx
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.2.18
+    - alias: isaac-content-editor
+      name: nginx
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.2.18
+    - alias: isaac-code-editor
+      name: nginx
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.2.18
+    - alias: elastic-search
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: 7.17.3
+    description: A Helm chart for Kubernetes
+    digest: 4ebb9b99f6efb0d0c17a734dfc72d106d55e2696427d9bdcf368c1a406dc625c
+    name: isaac-app
+    type: application
+    urls:
+    - https://github.com/isaaccomputerscience/charts/releases/download/isaac-app-1.3.3/isaac-app-1.3.3.tgz
+    version: 1.3.3
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-03-27T20:26:34.063968589Z"
     dependencies:
     - alias: isaac-app-fe
@@ -1331,4 +1366,4 @@ entries:
     urls:
     - https://github.com/isaaccomputerscience/charts/releases/download/isaac-app-1.0.0/isaac-app-1.0.0.tgz
     version: 1.0.0
-generated: "2023-03-27T20:26:34.064250992Z"
+generated: "2023-03-28T16:00:18.872429327Z"
