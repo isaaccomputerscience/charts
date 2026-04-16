@@ -143,6 +143,7 @@ api:
   service:
     type: ClusterIP
     port: 80
+    annotations: {}
   deployment:
     annotations: {}
   nodeSelector: {}
