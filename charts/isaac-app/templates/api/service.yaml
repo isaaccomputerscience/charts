@@ -4,6 +4,10 @@ metadata:
   name: {{ include "isaac-app.api.fullname" . }}
   labels:
     {{- include "isaac-app.labels" . | nindent 4 }}
+  {{- with .Values.api.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.api.service.type }}
   ports:
